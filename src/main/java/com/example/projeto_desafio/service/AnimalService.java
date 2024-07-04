@@ -12,8 +12,11 @@ import java.util.Optional;
 @Service
 public class AnimalService {
 
-    @Autowired
-    private AnimalRepository animalRepository;
+    private final AnimalRepository animalRepository;
+
+    public AnimalService(AnimalRepository animalRepository) {
+        this.animalRepository = animalRepository;
+    }
 
     public List<Animal> listAll() {
         try {
