@@ -4,7 +4,6 @@ import com.example.projeto_desafio.dto.AnimalDTO;
 import com.example.projeto_desafio.entity.Animal;
 import com.example.projeto_desafio.exception.EntityNotFoundException;
 import com.example.projeto_desafio.service.AnimalService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -70,9 +69,8 @@ public class AnimalController {
     @PutMapping("/changeStatus/{id}")
     public ResponseEntity<?> updateStatusAnimal(@PathVariable Integer id) {
         try {
-            animalService.updateStatus(id);
-            String message = "Animal de ID " + id + " foi alterado o status com sucesso.";
-            return ResponseEntity.ok(message);
+            AnimalDTO updatedStatusAnimal = animalService.updateStatus(id);
+            return new ResponseEntity<>(updatedStatusAnimal, HttpStatus.ACCEPTED);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }

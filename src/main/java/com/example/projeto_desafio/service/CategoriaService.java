@@ -3,7 +3,6 @@ package com.example.projeto_desafio.service;
 import com.example.projeto_desafio.entity.Categoria;
 import com.example.projeto_desafio.exception.EntityNotFoundException;
 import com.example.projeto_desafio.repository.CategoriaRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,8 +11,11 @@ import java.util.Optional;
 @Service
 public class CategoriaService {
 
-    @Autowired
-    private CategoriaRepository categoriaRepository;
+    private final CategoriaRepository categoriaRepository;
+
+    public CategoriaService(CategoriaRepository categoriaRepository) {
+        this.categoriaRepository = categoriaRepository;
+    }
 
     public List<Categoria> listAll() {
         try {

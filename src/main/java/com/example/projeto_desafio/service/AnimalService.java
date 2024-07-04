@@ -7,13 +7,10 @@ import com.example.projeto_desafio.exception.EntityNotFoundException;
 import com.example.projeto_desafio.mapper.AnimalMapper;
 import com.example.projeto_desafio.repository.AnimalRepository;
 import com.example.projeto_desafio.repository.CategoriaRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.time.Period;
+
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -31,16 +28,11 @@ public class AnimalService {
         try {
             List<Animal> animals = animalRepository.findAll();
             return animals.stream()
-                    .map(animal -> {
-                        AnimalDTO dto = AnimalMapper.toDTO(animal);
-                        dto.setIdade(AnimalMapper.getIdade(animal.getDataNascimento()));
-                        return dto;
-                    })
+                    .map(AnimalMapper::toDTO)
                     .collect(Collectors.toList());
         } catch (Exception e) {
-            // Log the exception details
             System.out.println("Error occurred while fetching all animals: " + e.getMessage());
-            throw e; // Rethrow to allow further handling if necessary
+            throw e;
         }
     }
 
@@ -56,13 +48,12 @@ public class AnimalService {
         }
     }
 
-    public AnimalDTO save(AnimalDTO animal) {
+    public AnimalDTO save(AnimalDTO animalDTO) {
         try {
-            Animal createdAnimal = AnimalMapper.toEntity(animal, this.categoriaRepository);
+            Animal createdAnimal = AnimalMapper.toEntity(animalDTO, this.categoriaRepository);
             animalRepository.save(createdAnimal);
-            animal.setId(createdAnimal.getId());
-            animal.setIdade(AnimalMapper.getIdade(animal.getDataNascimento()));
-            return animal;
+            animalDTO = AnimalMapper.toDTO(createdAnimal);
+            return animalDTO;
         } catch (Exception e) {
             System.out.println("Error occurred while saving animal: " + e.getMessage());
             throw e;
@@ -85,7 +76,7 @@ public class AnimalService {
         }
     }
 
-    public void updateStatus(Integer id) {
+    public AnimalDTO updateStatus(Integer id) {
         try {
             if (!animalRepository.existsById(id)) {
                 throw new EntityNotFoundException("Animal with ID " + id + " not found.");
@@ -101,6 +92,7 @@ public class AnimalService {
             }
 
             animalRepository.save(animal);
+            return AnimalMapper.toDTO(animal);
         } catch (EntityNotFoundException error) {
             System.out.println(error.getMessage());
             throw error;

@@ -22,6 +22,7 @@ public class AnimalMapper {
         if (animal.getCategoria() != null) {
             dto.setNomeCategoria(animal.getCategoria().getNome());
         }
+        dto.setIdade(getIdade(animal.getDataNascimento()));
         return dto;
 
     }
