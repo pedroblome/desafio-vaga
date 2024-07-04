@@ -13,3 +13,4 @@ CREATE TABLE animal (
     categoria_id INT,
     CONSTRAINT fk_categoria FOREIGN KEY (categoria_id) REFERENCES categoria(id)
 );
+

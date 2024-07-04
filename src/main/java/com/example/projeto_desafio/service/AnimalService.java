@@ -1,26 +1,35 @@
 package com.example.projeto_desafio.service;
 
+import com.example.projeto_desafio.dto.AnimalDTO;
 import com.example.projeto_desafio.entity.Animal;
 import com.example.projeto_desafio.exception.EntityNotFoundException;
+import com.example.projeto_desafio.mapper.AnimalMapper;
 import com.example.projeto_desafio.repository.AnimalRepository;
+import com.example.projeto_desafio.repository.CategoriaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class AnimalService {
 
     private final AnimalRepository animalRepository;
+    private final CategoriaRepository categoriaRepository;
 
-    public AnimalService(AnimalRepository animalRepository) {
+    public AnimalService(AnimalRepository animalRepository, CategoriaRepository categoriaRepository) {
         this.animalRepository = animalRepository;
+        this.categoriaRepository = categoriaRepository;
     }
 
-    public List<Animal> listAll() {
+    public List<AnimalDTO> listAll() {
         try {
-            return animalRepository.findAll();
+            List<Animal> animals = animalRepository.findAll();
+            return animals.stream()
+                    .map(AnimalMapper::toDTO)
+                    .collect(Collectors.toList());
+
         } catch (Exception e) {
             // Log the exception details
             System.out.println("Error occurred while fetching all animals: " + e.getMessage());
@@ -28,38 +37,28 @@ public class AnimalService {
         }
     }
 
-    public Optional<Animal> findById(Integer id) {
+    public AnimalDTO findById(Integer id) {
         try {
-            return animalRepository.findById(id);
+            Animal animal = animalRepository.findById(id).orElseThrow(()-> new RuntimeException("Animal not found with ID: " + id));
+            return AnimalMapper.toDTO(animal);
         } catch (Exception e) {
             System.out.println("Error occurred while fetching animal by ID: " + e.getMessage());
             throw e;
         }
     }
 
-    public Animal save(Animal animal) {
+    public AnimalDTO save(AnimalDTO animal) {
         try {
-            return animalRepository.save(animal);
+             Animal createdAnimal =  AnimalMapper.toEntity(animal, this.categoriaRepository);
+             animalRepository.save(createdAnimal);
+             animal.setId(createdAnimal.getId());
+             return animal;
         } catch (Exception e) {
             System.out.println("Error occurred while saving animal: " + e.getMessage());
             throw e;
         }
     }
 
-    public Animal update(Animal animal) {
-        try {
-            if (animal.getId() == null || !animalRepository.existsById(animal.getId())) {
-                throw new EntityNotFoundException("Animal with ID " + animal.getId() + " not found.");
-            }
-            return animalRepository.save(animal);
-        } catch (EntityNotFoundException enfe) {
-            System.out.println(enfe.getMessage());
-            throw enfe;
-        } catch (Exception e) {
-            System.out.println("Error occurred while updating animal: " + e.getMessage());
-            throw e;
-        }
-    }
 
     public void delete(Integer id) {
         try {

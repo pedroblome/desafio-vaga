@@ -1,11 +1,10 @@
 package com.example.projeto_desafio.controller;
 
 import com.example.projeto_desafio.entity.Categoria;
+import com.example.projeto_desafio.exception.EntityNotFoundException;
 import com.example.projeto_desafio.service.CategoriaService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,38 +13,58 @@ import java.util.List;
 @RequestMapping("/api/categories")
 public class CategoriaController {
 
-    @Autowired
-    private CategoriaService categoriaService;
+
+    private final CategoriaService categoriaService;
+
+    public CategoriaController(CategoriaService categoriaService) {
+        this.categoriaService = categoriaService;
+    }
 
     @GetMapping
-    public ResponseEntity<List<Categoria>> getAllCategories() {
-        List<Categoria> categories = categoriaService.listAll();
-        return ResponseEntity.ok(categories);
+    public ResponseEntity<?> getAllCategories() {
+        try {
+            List<Categoria> categories = categoriaService.listAll();
+            return ResponseEntity.ok(categories);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error retrieving categories: " + e.getMessage());
+        }
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Categoria> getCategoryById(@PathVariable Integer id) {
-        Categoria categoria = categoriaService.findById(id)
-                .orElseThrow(() -> new RuntimeException("Category not found with id " + id));
-        return ResponseEntity.ok(categoria);
+    public ResponseEntity<?> getCategoryById(@PathVariable Integer id) {
+        try {
+            Categoria categoria = categoriaService.findById(id)
+                    .orElseThrow(() -> new EntityNotFoundException("Category not found with id " + id));
+            return ResponseEntity.ok(categoria);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error finding category: " + e.getMessage());
+        }
     }
 
     @PostMapping
-    public ResponseEntity<Categoria> createCategory(@RequestBody Categoria categoria) {
-        Categoria savedCategoria = categoriaService.save(categoria);
-        return new ResponseEntity<>(savedCategoria, HttpStatus.CREATED);
+    public ResponseEntity<?> createCategory(@RequestBody Categoria categoria) {
+        try {
+            Categoria savedCategoria = categoriaService.save(categoria);
+            return new ResponseEntity<>(savedCategoria, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error saving category: " + e.getMessage());
+        }
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Categoria> updateCategory(@PathVariable Integer id, @RequestBody Categoria categoria) {
-        categoria.setId(id);
-        Categoria updatedCategoria = categoriaService.update(categoria);
-        return ResponseEntity.ok(updatedCategoria);
-    }
+
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCategory(@PathVariable Integer id) {
-        categoriaService.delete(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<?> deleteCategory(@PathVariable Integer id) {
+        try {
+            categoriaService.delete(id);
+            return ResponseEntity.ok("Category with ID " + id + " was deleted successfully.");
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Category not found with ID " + id);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error deleting category: " + e.getMessage());
+        }
     }
+
 }

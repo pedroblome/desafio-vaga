@@ -17,6 +17,7 @@ public class CategoriaService {
 
     public List<Categoria> listAll() {
         try {
+
             return categoriaRepository.findAll();
         } catch (Exception e) {
             System.out.println("Error occurred while fetching all categories: " + e.getMessage());
