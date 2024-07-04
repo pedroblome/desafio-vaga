@@ -6,6 +6,9 @@ import com.example.projeto_desafio.entity.Animal;
 import com.example.projeto_desafio.entity.Categoria;
 import com.example.projeto_desafio.repository.CategoriaRepository;
 
+import java.time.LocalDate;
+import java.time.Period;
+
 public class AnimalMapper {
 
     public static AnimalDTO toDTO(Animal animal) {
@@ -48,5 +51,11 @@ public class AnimalMapper {
             categoria = categoriaRepository.save(categoria);
         }
         return categoria;
+    }
+    public static Integer getIdade(LocalDate dataNascimento) {
+        if (dataNascimento != null) {
+            return Period.between(dataNascimento, LocalDate.now()).getYears();
+        }
+        return null;
     }
 }

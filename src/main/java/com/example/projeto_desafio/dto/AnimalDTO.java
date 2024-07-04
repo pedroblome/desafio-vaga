@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Getter
@@ -19,6 +20,7 @@ public class AnimalDTO {
     private String descricao;
     private String urlImagem;
     private String nomeCategoria;
-    private Date dataNascimento;
+    private LocalDate dataNascimento;
     private Status status;
+    private Integer idade;
 }

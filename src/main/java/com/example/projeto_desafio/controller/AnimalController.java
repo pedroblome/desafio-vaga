@@ -67,4 +67,14 @@ public class AnimalController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
+    @PutMapping("/changeStatus/{id}")
+    public ResponseEntity<?> updateStatusAnimal(@PathVariable Integer id) {
+        try {
+            animalService.updateStatus(id);
+            String message = "Animal de ID " + id + " foi alterado o status com sucesso.";
+            return ResponseEntity.ok(message);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
 }
