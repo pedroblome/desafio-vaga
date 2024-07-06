@@ -1,7 +1,9 @@
 package com.example.projeto_desafio.service;
 
+import com.example.projeto_desafio.dto.CategoriaDTO;
 import com.example.projeto_desafio.entity.Categoria;
 import com.example.projeto_desafio.exception.EntityNotFoundException;
+import com.example.projeto_desafio.mapper.CategoriaMapper;
 import com.example.projeto_desafio.repository.CategoriaRepository;
 import org.springframework.stereotype.Service;
 
@@ -36,9 +38,13 @@ public class CategoriaService {
         }
     }
 
-    public Categoria save(Categoria categoria) {
+    public CategoriaDTO save(CategoriaDTO categoriaDTO) {
         try {
-            return categoriaRepository.save(categoria);
+
+            Categoria savedCategoria = CategoriaMapper.toEntity(categoriaDTO);
+            categoriaRepository.save(savedCategoria);
+            categoriaDTO.setId(savedCategoria.getId());
+            return categoriaDTO;
         } catch (Exception e) {
             System.out.println("Error occurred while saving category: " + e.getMessage());
             throw e;

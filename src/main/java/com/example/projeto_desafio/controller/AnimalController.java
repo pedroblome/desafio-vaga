@@ -4,6 +4,7 @@ import com.example.projeto_desafio.dto.AnimalDTO;
 import com.example.projeto_desafio.entity.Animal;
 import com.example.projeto_desafio.exception.EntityNotFoundException;
 import com.example.projeto_desafio.service.AnimalService;
+import com.example.projeto_desafio.service.CategoriaService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -17,10 +18,17 @@ public class AnimalController {
 
 
     private final AnimalService animalService;
+    private final CategoriaService categoriaService;
 
-    public AnimalController(AnimalService animalService) {
+
+    public AnimalController(AnimalService animalService,CategoriaService categoriaService) {
         this.animalService = animalService;
+        this.categoriaService =  categoriaService;
     }
+
+
+
+
     @GetMapping
     public ResponseEntity<?> getAllAnimals() {
 

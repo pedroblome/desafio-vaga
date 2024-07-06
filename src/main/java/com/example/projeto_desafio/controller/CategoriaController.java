@@ -1,5 +1,6 @@
 package com.example.projeto_desafio.controller;
 
+import com.example.projeto_desafio.dto.CategoriaDTO;
 import com.example.projeto_desafio.entity.Categoria;
 import com.example.projeto_desafio.exception.EntityNotFoundException;
 import com.example.projeto_desafio.service.CategoriaService;
@@ -44,10 +45,10 @@ public class CategoriaController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createCategory(@RequestBody Categoria categoria) {
+    public ResponseEntity<?> createCategory(@RequestBody CategoriaDTO categoriaDTO) {
         try {
-            Categoria savedCategoria = categoriaService.save(categoria);
-            return new ResponseEntity<>(savedCategoria, HttpStatus.CREATED);
+            CategoriaDTO savedCategoriaDTO = categoriaService.save(categoriaDTO);
+            return new ResponseEntity<>(savedCategoriaDTO, HttpStatus.CREATED);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error saving category: " + e.getMessage());
         }

@@ -29,7 +29,7 @@ public class AnimalMapper {
 
     public static Animal toEntity(AnimalDTO dto, CategoriaRepository categoriaRepository) {
         Animal animal = new Animal();
-        animal.setId(dto.getId());
+//        animal.setId(dto.getId());
         animal.setNome(dto.getNome());
         animal.setDescricao(dto.getDescricao());
         animal.setUrlImagem(dto.getUrlImagem());
