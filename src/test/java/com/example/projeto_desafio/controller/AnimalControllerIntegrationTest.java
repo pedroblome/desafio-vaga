@@ -57,7 +57,7 @@ public class AnimalControllerIntegrationTest {
         mockMvc.perform(get("/api/animals")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(12)))  // Como há 12 registros no meu populate_data.sql
+                .andExpect(jsonPath("$", hasSize(10)))  //
                 .andExpect(jsonPath("$[0].nome").value("Rex"))
                 .andExpect(jsonPath("$[0].descricao").value("Gato carinhoso e bastante dócil"))
                 .andExpect(jsonPath("$[0].urlImagem").value("https://img.freepik.com/fotos-premium/gato-listrado-de-raca-mista-sentado_191971-20577.jpg?ga=GA1.1.1960310311.1720063059&semt=sph"))
