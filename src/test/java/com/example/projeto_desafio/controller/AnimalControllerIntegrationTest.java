@@ -13,8 +13,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.time.LocalDate;
 
 import static org.hamcrest.Matchers.hasSize;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -85,9 +84,25 @@ public class AnimalControllerIntegrationTest {
 
     @Test
     public void shouldNotFindAnimalById() throws Exception {
-        mockMvc.perform(get("/api/animals/999")  // Suponha que o ID 999 não exista
+        mockMvc.perform(get("/api/animals/999")  // ID 999 não exista
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
     }
+
+    @Test
+    public void shouldUpdateAnimalStatus() throws Exception {
+        mockMvc.perform(put("/api/animals/changeStatus/2")  //
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isAccepted())
+                .andExpect(jsonPath("$.status").value("ADOTADO"));
+    }
+
+    @Test
+    public void shouldNotUpdateAnimalStatus() throws Exception {
+        mockMvc.perform(put("/api/animals/changeStatus/999")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isInternalServerError());
+    }
+
 
 }
