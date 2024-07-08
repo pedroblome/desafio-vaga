@@ -1,5 +1,6 @@
 INSERT INTO categoria (nome) VALUES ('Cachorros');
 INSERT INTO categoria (nome) VALUES ('Gatos');
+INSERT INTO categoria (nome) VALUES ('Outros');
 
 INSERT INTO animal (nome, descricao, url_imagem, data_nascimento, status, categoria_id)
 VALUES ('Rex', 'Gato carinhoso e bastante dócil', 'https://img.freepik.com/fotos-premium/gato-listrado-de-raca-mista-sentado_191971-20577.jpg?ga=GA1.1.1960310311.1720063059&semt=sph', '2020-01-01', 'DISPONIVEL', 2);

@@ -6,8 +6,8 @@ CREATE TABLE categoria (
 CREATE TABLE animal (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(255) NOT NULL,
-    descricao VARCHAR(255),
-    url_imagem VARCHAR(255),
+    descricao VARCHAR(1000),
+    url_imagem VARCHAR(10000),
     data_nascimento DATE,
     status VARCHAR(50),
     categoria_id INT,

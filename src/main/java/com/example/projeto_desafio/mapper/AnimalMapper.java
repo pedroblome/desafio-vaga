@@ -53,9 +53,13 @@ public class AnimalMapper {
         }
         return categoria;
     }
-    public static Integer getIdade(LocalDate dataNascimento) {
+    public static String getIdade(LocalDate dataNascimento) {
         if (dataNascimento != null) {
-            return Period.between(dataNascimento, LocalDate.now()).getYears();
+            Period periodo = Period.between(dataNascimento, LocalDate.now());
+            return String.format("%d anos, %d meses e %d dias",
+                    periodo.getYears(),
+                    periodo.getMonths(),
+                    periodo.getDays());
         }
         return null;
     }

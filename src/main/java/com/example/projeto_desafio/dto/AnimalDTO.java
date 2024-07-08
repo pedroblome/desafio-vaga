@@ -22,5 +22,5 @@ public class AnimalDTO {
     private String nomeCategoria;
     private LocalDate dataNascimento;
     private Status status;
-    private Integer idade;
+    private String idade;
 }
