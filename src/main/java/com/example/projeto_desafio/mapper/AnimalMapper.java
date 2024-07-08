@@ -44,7 +44,7 @@ public class AnimalMapper {
         return animal;
     }
 
-    private static Categoria findOrCreateCategoria(String nome, CategoriaRepository categoriaRepository) {
+    public static Categoria findOrCreateCategoria(String nome, CategoriaRepository categoriaRepository) {
         Categoria categoria = categoriaRepository.findByNome(nome);
         if (categoria == null) {
             categoria = new Categoria();
